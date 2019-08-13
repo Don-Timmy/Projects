@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "+//ISBN 82-7640-037::WWW//DTD HTML//EN//2.0" "html.dtd">
+<!-- saved from url=(0046)http://jse.amstat.org/v3n2/datasets.braun.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+ <title>Journal of Statistics Education, V3N2: Braun</title>
+</head>
+<body bgcolor="#ffffff">
+            
+<h1>An Illustration of Bootstrapping Using Video Lottery Terminal Data</h1>
+
+                            W. John Braun<br>
+                      The University of Winnipeg
+
+
+      
+<p>    <cite>Journal of Statistics Education</cite> v.3, n.2 (1995)
+</p>
+
+         
+<p>Copyright (c) 1995 by W. John Braun, all rights          reserved. 
+This text may be freely shared among          individuals, but it may
+not be republished in any          medium without express written
+consent from the author          and advance notification of the editor.
+</p>
+
+<hr>  
+<p>   <strong>Key Words</strong>:  Simulation; Contingency tables;
+Elementary      probabilities.
+</p>
+
+
+                              
+<h2>Abstract</h2>
+
+         
+<p>The video lottery terminal dataset contains          observations on
+the three windows of an electronic          slot machine for 345 plays
+together with the prize          paid out for each play.  The prize
+payout          distribution is so badly skewed that confidence         
+intervals for expected payout based on the central          limit
+theorem are not accurate.  This dataset can          be used at the
+graduate or upper undergraduate          level to illustrate parametric
+bootstrapping.  The          dataset can also be used in a graduate
+course to          illustrate tests of independence for two and         
+three-way contingency tables involving random          zeroes, or these
+tables may be collapsed and used          as examples in an introductory
+course.</p>
+
+
+<h1>
+                          1.  Introduction
+</h1>
+
+<p>1    Video lottery terminals (VLTs) are electronic slot machines    
+ with several line-up style games, including one called      Double
+Diamond.  This game consists of three windows in      which one of seven
+objects may appear (after the gambler has      inserted a quarter).  If
+the objects in the three windows      match one of several possible
+combinations, the gambler is      awarded a prize (in quarters). 
+Otherwise, nothing is      awarded.
+</p>
+<p>2    The objects that can appear are blanks (0), single bars (B),   
+  double bars (BB), triple bars (BBB), double diamonds (DD),     
+cherries (C), and sevens (7).  These objects are not equally      likely
+to appear in each window, and the object      distributions may not be
+the same for the different windows.
+</p>
+<p>3    The payouts for winning combinations of objects appearing in   
+  the three windows are given in the following table.
+</p>
+
+                  
+<pre>                   COMBINATION     PRIZE PAYOUT
+                    DD  DD  DD        800
+                     7   7   7         80
+                   BBB BBB BBB         40
+                    BB  BB  BB         25
+                     B   B   B         10
+                     C   C   C         10
+                    AB  AB  AB          5
+                     C   C   0          5
+                     C   0   C          5
+                     0   C   C          5
+                     C   0   0          2
+                     0   C   0          2
+                     0   0   C          2
+</pre>
+
+     
+<p>AB = ANY BAR, i.e., a single, double or triple bar.  A      double
+diamond doubles any winning combination, while two      double diamonds
+quadruple any winning combination.  For      example, 7 DD DD pays 320. 
+Cherries result in a payout      regardless of what appears with them.</p>
+
+<p>4    The Manitoba Lotteries Foundation provides (limited)     
+information to the public describing the video lottery      terminal
+games it administers.  The description of the      Double Diamond game
+claims that the "prize payout is 92%,"      which must be interpreted as
+the expected payout per play.
+</p>
+<p>5    The Canadian Broadcasting Corporation (CBC) asked the author   
+  to conduct an investigation of the payout claim, since a CBC     
+reporter suspected a payout of closer to 40%.  The Manitoba     
+Lotteries Foundation and the VLT manufacturer could not      supply the
+required probability distributions, so these had      to be estimated on
+the basis of a sample.
+</p>
+<p>6    The author took an initial sample of 138 plays in which the    
+ actual observed payout was around 38%, appearing to confirm      the
+reporter's claims.  This result, however, could not be      trusted
+because the payout distribution turns out to be      highly skewed.  A
+more careful analysis (which is greatly      simplified by using the
+parametric bootstrap) gave an      estimate of the expected payout that
+is considerably higher,      together with more sensible standard error
+estimates.
+</p>
+<p>7    Along the way, it was necessary to confirm the     
+manufacturer's claim that the objects appear in the three      windows
+independently of each other.  The resulting      three-way contingency
+table is riddled with zeroes so that      care must be taken when
+computing the degrees of freedom for      the chi-square test.  The
+author has found it much quicker      to use the bootstrap to test for
+independence.  An      additional sample of 207 plays was taken later to
+check the      results of the smaller sample.
+</p>
+
+
+                         
+<h1>2.  The Prize Payout</h1>
+
+
+<p> 8    As stated earlier, the Manitoba Lotteries Corporation claims  
+    that its Double Diamond VLT game has a prize payout of 92%.      
+This game provides an example of expected value that lends       itself
+to discussion in an introductory statistics course.       In fact, it is
+interesting to ask students how they       interpret the claim.  As
+stated, the claim is somewhat       ambiguous, and not everyone realizes
+immediately that the       claim concerns expected payout.
+</p>
+<p> 9    An apparent paradox can be noted:  A fellow started with one  
+    thousand dollars and successfully gambled it all away within      
+five days of intensive gambling.  Does this constitute       evidence
+that the payout is much less than 92%?  (Needless       to say, the
+unlucky fellow felt that it was very strong       evidence.  Of course,
+he was simply ignorant of the true       intent of the term "payout.")
+</p>
+<p>10    Because the payout distribution is highly skewed, the      
+expected payout is not an appropriate measure of central       tendency
+here.  An interesting discussion question could       center on the
+Manitoba Lotteries Corporation's motives in       using the expected
+payout in its advertising instead of the       median or modal payout.
+</p>
+
+
+                        
+<h1>3.  Disputing the Claim</h1>
+
+
+<p>11    The CBC, looking for a story, disputed the Lotteries      
+Corporation claim of 92% and put forward their own claim of       a 40%
+expected payout.  An appropriate confidence interval       is required
+to settle this dispute.  (Alternatively, a       one-tailed test,
+corresponding to the CBC claim or to the       Lotteries Corporation
+claim, could be considered here.)
+</p>
+<p>12    Let X denote the prize payout on any single play.  The      
+objective is to estimate \mu = E[X] with a confidence       interval,
+using the sample of 138 plays.  In this sample,       the prize awarded
+at each play was recorded.  (Information       on the individual windows
+was collected as well, but that is       not needed yet.)  Since these
+plays were taken successively       at a single machine, the question of
+whether they constitute       a truly random sample arises.  The author
+was assured by the       manufacturer of the machines that a "good
+pseudorandom       number generator was used to generate the sequence of
+      objects in the three windows."  As far as representing the      
+entire population of video lottery terminals is concerned,       the
+machines are apparently identical, so sampling from one       machine
+should have been sufficient.
+</p>
+<p>13    Using the obtained data (\bar{x} = .384, s = 1.27, s.e. =     
+ .108), an approximate 99% confidence interval for \mu is       (0.11,
+0.66).  This would lead us to reject the Lotteries       Corporation
+claim at the .005 level.  This inference assumes       that the sampling
+distribution of \bar{X} is close to normal       because of the central
+limit theorem.
+</p>
+<p>14    Ordinarily, a sample of 138 observations is considered to be  
+    sufficiently large that a confidence interval based on the      
+central limit theorem should be fairly accurate.  In this       case,
+however, the standard error is severely       underestimated, because
+events in the tail of the (highly       skewed) payout distribution are
+not observed.  Thus, the       confidence interval is much narrower than
+it should be.       Either a larger sample or a better estimate of the
+standard       error is required.
+</p>
+<p>15    A boxplot of the payout data may be useful here to convey     
+ the highly skewed character of the distribution.  Students       may
+find it surprising to see a boxplot where the "box" is a       single
+line and all non-zero data points appear as outliers.
+</p>
+
+
+         
+<h1> 4.  Estimating the Standard Error by Bootstrapping
+</h1>
+
+<p>16    The true sampling distribution of \bar{X} can be      
+bootstrapped using the data collected on the individual       windows. 
+For each window, the probability of each object       appearing can be
+estimated from the sample proportion.       Assuming the windows are
+independent (see below), a single       play of the VLT game can be
+bootstrapped by simulation of       the estimated multinomial
+probabilities for each window.
+</p>
+<p>17    The payout table is used to determine the prize awarded for   
+   each combination generated by the simulation.  Thus, the       prizes
+for a re-sample of 138 plays can be easily obtained.       A large
+number (say, 1000) of these re-samples is then used       to obtain the
+bootstrap sampling distribution, from which       estimates of the
+standard error and percentile confidence       intervals (<a href="http://jse.amstat.org/v3n2/datasets.braun.html#hall">Hall 1992, Ch.
+I</a>) can be obtained.  This can       easily be programmed.  (A Fortran
+program that carries out       these computations is available from the
+author.  In       addition, a graphics program that simulates the
+windows of       the video lottery terminal is available for DOS
+machines.       Instructions for obtaining this graphics program by ftp
+or       e-mail request are given at the end of this article.)
+</p>
+<p>18    The bootstrap estimate of the standard error is .39, and a    
+  95% confidence interval (percentile-method) for \mu is       (0.27,
+1.29), indicating that we do not have much evidence       against the
+claim.
+</p>
+
+
+            
+<h1> 5.  Obtaining a Narrower Confidence Interval
+</h1>
+
+<p>19    Of course, one may argue that the confidence interval      
+obtained above is so wide that either the CBC claim or the      
+manufacturer's claim could be true.  Is there a way of       narrowing
+the interval enough so that at least one of the       claims can be
+rejected?  (One would ideally like to do this       without taking an
+excessively large sample.  Note that one       could now obtain an
+estimate of the sample size required to       obtain a confidence
+interval of specified length.)
+</p>
+<p>20    We can actually get an improved estimate of the expected      
+payout by using the payout table in conjunction with the       products
+of the estimated probabilities (again assuming       independence among
+the windows).  The calculation is       elementary but tedious; it is
+easily implemented in SAS or       Fortran.  In fact, one could use the
+same idea to estimate       the variance of this estimator, but for
+this, the bootstrap       is much less complicated to implement.  For
+each of the       re-samples obtained earlier, we compute the above     
+ expectation to obtain the bootstrap sampling distribution of       this
+new estimator.
+</p>
+<p>21    The expected payout is now estimated to be .65 with a      
+standard error of .13.  The 95% confidence interval      
+(percentile-method) is (.454, .866) which fails to contain       either
+claimed value.  The 99% confidence interval is (.188,       1.021) which
+contains both values.  Perhaps a larger sample       is required after
+all!
+</p>
+<p>22    If one pools the data from the first and second samples, one  
+    finds that the 95% and 99% confidence intervals are (.67,      
+1.10) and (.61, 1.21), respectively.  Thus, they do not       contain
+the CBC claim of .40, but they do contain the       Lotteries Foundation
+claim of .92.  Thus, the CBC does not       have a scoop.
+</p>
+
+
+          
+<h1>    6.  Confirming the Independence Assumption</h1>
+
+<p>23    To justify the parametric bootstrap used above, we need to    
+  demonstrate that the three windows are independent.  (The      
+manufacturer said they are, but we should verify this.)
+</p>
+<p>24    The \chi^2 statistic can be computed for the three-way table  
+    (a 7 x 7 x 7 table).  There are many zeroes in this table      
+including an entire layer.  All of these zeroes are random,       so the
+p-value corresponding to \chi^2 = 334.4 on 180 d.f.       is
+meaningless.  <a href="http://jse.amstat.org/v3n2/datasets.braun.html#christensen">Christensen (1990, Ch. X)</a>, for example,       suggests
+ways around this problem, but bootstrapping works       as well.  Using
+the above re-samples, compute the \chi^2       statistic each time, and
+compare the resulting bootstrap       sampling distribution with the
+original observed value.       (Recall that the simulation was based on
+the assumption that       the windows are independent.)  For the first
+sample, the       p-value is about .12, indicating that independence is
+a safe       assumption.
+</p>
+<p>25    Is the distribution of objects the same in each window?  A    
+  test of homogeneity among the three windows is a natural       test to
+apply, and can be demonstrated in an introductory       course.  The
+three two-way tables can also be analyzed in an       introductory
+setting by collapsing various rows to eliminate       the random zeroes.
+ In this case, one would presumably want       to use the entire
+dataset.  The author has also tested       goodness-of-fit of various
+distributions of the objects in       the particular windows.  For
+example, one could test whether       the seven objects
+(0,B,BB,BBB,C,7,DD) are distributed in the       ratio 32:16:8:4:2:1:1,
+for any of the three windows. 
+</p>
+
+<h1>7.  Probability Questions</h1>
+
+
+<p>26    A number of probability and stochastic processes questions    
+  arise naturally from consideration of this dataset.  Some of      
+these can be answered using the probabilities estimated from       the
+combined dataset, or by using a bootstrap computation.
+</p>
+
+     
+<blockquote>7.1  What is the probability of winning the largest prize?
+</blockquote>
+    
+<blockquote> 7.2  What is the probability of winning nothing?
+</blockquote>
+    
+<blockquote> 7.3  Suppose that a gambler has n quarters.  Show that if
+          the Lotteries Foundation's claim is true, then the
+          number N of plays the gambler can expect to make is
+          12.5 n.</blockquote>
+
+    
+<blockquote> 7.4  Use the bootstrap to explore the distribution of N.
+</blockquote>
+    
+<blockquote> 7.5  Even if the mean payout is really .92, is the Lotteries
+          Foundation supplying useful information?  Use the
+          bootstrap to estimate the median payout for various
+          sample sizes.  This indicates that the payout observed
+          by the CBC reporter and in the first sample are not
+          unusual, even if they are not near the true mean.
+</blockquote>
+    
+<blockquote> 7.6  Starting with 100 quarters, what is the probability of
+          eventually reaching 200 or more?  300 or more?
+</blockquote>
+    
+<blockquote> 7.7  Suppose a player starts with 1000 dollars (4000
+          quarters), and suppose each play takes one second.
+          Estimate the expected time until the player has nothing
+          left.
+</blockquote>
+     
+<blockquote>7.8  The results for the two samples appear to be quite
+          different.  Is this difference statistically
+          significant?
+</blockquote>
+
+
+                        
+<h1> 8.  Getting the Data
+</h1>
+
+<p>27    The file <a href="http://jse.amstat.org/datasets/vlt.dat.txt">vlt.dat.txt</a>
+contains the raw data.  The file
+<a href="http://jse.amstat.org/datasets/vlt.txt">vlt.txt</a> is a
+documentation file containing a brief description of the
+dataset.
+</p>
+
+
+<hr>               
+<h1> Appendix - Key to Variables in vlt.dat.txt</h1>
+
+
+      
+<p>The first three columns of the dataset record the objects      
+observed in the three windows.  The fourth column records       the
+prize awarded, and the fifth column indicates the night       the sample
+was obtained.  Values are delimited by blanks;       note that columns
+are not aligned.
+</p>
+
+     
+<pre>Coding for variables 1, 2, 3:
+                       CODE    OBJECT
+                        0      BLANK  (0)
+                        1      SINGLE BAR (B)
+                        2      DOUBLE BAR (BB)
+                        3      TRIPLE BAR (BBB)
+                        5      DOUBLE DIAMOND (DD)
+                        6      CHERRIES (C)
+                        7      SEVEN (7)
+
+Coding for variable 5:
+                       CODE    INDICATES
+                        1      SAMPLE TAKEN ON FIRST NIGHT
+                        2      SAMPLE TAKEN ON SECOND NIGHT
+</pre>
+
+
+<hr>                             
+<h1> References</h1>
+
+
+      
+<p> <a name="christensen">Christensen, R. (1990)</a>, <cite>Log-Linear Models</cite>, New York: 
+         Springer-Verlag.
+</p>
+     
+<p>  <a name="hall">Hall, P. (1992)</a>, <cite>The Bootstrap and Edgeworth Expansion</cite>,
+          New York: Springer-Verlag.
+</p>
+<hr>
+<p>
+      W. John Braun
+<br>
+      Department of Mathematics and Statistics
+<br>
+      University of Winnipeg
+<br>
+      515 Portage Ave.
+<br>
+      Winnipeg, Manitoba   R3B 2E9
+<br>
+      CANADA
+      
+</p><address>braun@uwpg02.uwinnipeg.ca</address>
+<p></p>
+<hr>
+
+<p>
+<a href="http://jse.amstat.org/v3n2/vlt.exe"><img src="./Journal of Statistics Education, V3N2_ Braun_files/bluebullet.gif" align="top" width="20" height="20"> <strong>Download Video Lottery Program
+to a Local File</strong></a>
+</p>
+
+     <p> This program requires a DOS machine with a coprocessor and
+      at least 4 MB of RAM.  Start the program by typing "vlt"
+      (without the quotes) at the DOS prompt.
+</p>
+
+
+<hr>
+
+<a href="http://jse.amstat.org/toc.html#1995">Return to Table of Contents</a> | 
+
+<a href="http://jse.amstat.org/index.html">Return to the JSE Home Page</a>
+
+
+
+</body></html>

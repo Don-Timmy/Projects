@@ -1,0 +1,56 @@
+#Brief... 
+#We are going to be simulating a slot machine gambling game. You press the lever by running
+#a function and it will generate three random sysmbols and calculate your payout
+
+#First Task: Build the Play Function
+#Capabilities of the Play function: 1) Randomly generate three casino symbols from a casino
+                                      #symbols group
+                                   #2) Calculate a prize based on the symbols
+#Building a function for the first task:
+symbol.gen <- function() {
+    #this function randomly generates three symbols from the wheel
+    wheel <- c("DD", "7", "BBB", "BB", "B", "C", "0") #the slot machine symbols
+    sample(wheel, size =  3, replace = TRUE,
+           prob = c(0.03, 0.03, 0.06, 0.1, 0.25, 0.01, 0.52)) #randomly generate three num
+    #bers with the weights 'prob'
+}
+#test symbol.gen
+symbol.gen()
+
+
+
+
+score <- function (symbols) {
+    # identify case
+    same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+    bars <- symbols %in% c("B", "BB", "BBB")
+    # get prize
+    if (same) {
+        payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+                     "B" = 10, "C" = 10, "0" = 0)
+        prize <- unname(payouts[symbols[1]])
+    } else if (all(bars)) {
+        prize <- 5
+    } else {
+        cherries <- sum(symbols == "C")
+        prize <- c(0, 2, 5)[cherries + 1]
+    }
+    # adjust for diamonds
+    diamonds <- sum(symbols == "DD")
+    prize * 2 ^ diamonds
+}
+
+play <- function() {
+    symbols <- symbol.gen()
+    #print(symbols)
+    score <- score(symbols)
+    list(Output = symbols, Payouts = score)
+}
+play()
+
+playsimul <- replicate(50000, play()$Payouts)
+hist(playsimul)
+table(playsimul) #if you play this thing 20,000 times, you are likely to have $80 payout
+#only once... Wow... No wonder casinos are so profitable
+
+print
